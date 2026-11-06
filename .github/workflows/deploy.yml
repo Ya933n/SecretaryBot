@@ -44,4 +44,4 @@ jobs:
           
           # الرفع وتطبيق قاعدة البيانات (الآن الأداة ستسحب التوكين من قسم env تلقائياً)
           npx tgcloud push --force
-          npx tgcloud migrate
+          npx tgcloud migrate --yes
