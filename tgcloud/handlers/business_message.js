@@ -58,17 +58,34 @@ async function getOrCreateTopic(adminGroupId, userId, topicName, connectionId, f
     }
 }
 
-export default async function (business_message) {
-    // ======== بداية دالة الفحص (أضف هذا الجزء) ========
-    console.log("📩 رسالة جديدة وصلت:", JSON.stringify(business_message, null, 2));
 
-    if (business_message.via_bot || business_message.provider) {
-        console.log("🤖 تم التقاط رسالة من سكرتير آخر! اسم البوت:", business_message.via_bot?.first_name || "غير معروف");
+
+export default async function (business_message) {
+    // ======== بداية دالة الفحص وإرسال الـ Log للمجموعة ========
+    try {
+        // جلب آيدي مجموعة الإدارة من قاعدة البيانات
+        const groupRecord = await db.select().from(app_settings).where(eq(app_settings.key, 'admin_group')).get();
+        
+        if (groupRecord && groupRecord.value) {
+            // تجهيز نص الـ Log (قص النص إذا كان طويلاً جداً لتجنب خطأ تيليجرام)
+            const rawData = JSON.stringify(business_message, null, 2).substring(0, 3800);
+            const logText = "🚨 **فحص (Log): رسالة جديدة وصلت للسيرفر!**\n\n```json\n" + rawData + "\n```";
+            
+            // إرسال الـ Log إلى المجموعة
+            await api.sendMessage({
+                chat_id: groupRecord.value,
+                text: logText,
+                parse_mode: 'Markdown'
+            });
+        }
+    } catch (e) {
+        // تجاهل أخطاء إرسال اللوغ كي لا يتوقف البوت
     }
-    // ====================================================
+    // ============================================================
 
     const chatId = String(business_message.chat.id);
     const fromId = business_message.from?.id ? String(business_message.from.id) : null;
+    
     const msgId = business_message.message_id;
     // دعم النص العادي أو النص المرفق مع الوسائط (caption)
     const text = (business_message.text || business_message.caption || '').trim();
