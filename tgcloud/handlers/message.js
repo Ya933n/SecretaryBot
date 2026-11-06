@@ -14,8 +14,16 @@ export default async function (message) {
 
     const fromId = message.from?.id;
     const msgId = message.message_id;
-    // إزالة معرف البوت (إن وجد) من الأوامر لضمان استجابتها داخل المجموعة
-    const text = (message.text || '').replace('@Ya933nSecretaryBot', '');
+
+    let text = message.text || '';
+    
+    // إذا كان النص عبارة عن أمر، نقوم بقص أي شيء يأتي بعد علامة @
+    if (text.startsWith('/')) {
+        text = text.split('@')[0];
+    }
+
+
+
 
     if (String(fromId) !== OWNER_ID) return;
 
