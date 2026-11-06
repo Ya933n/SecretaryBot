@@ -57,7 +57,16 @@ async function getOrCreateTopic(adminGroupId, userId, topicName, connectionId, f
         return null;
     }
 }
+
 export default async function (business_message) {
+    // ======== بداية دالة الفحص (أضف هذا الجزء) ========
+    console.log("📩 رسالة جديدة وصلت:", JSON.stringify(business_message, null, 2));
+
+    if (business_message.via_bot || business_message.provider) {
+        console.log("🤖 تم التقاط رسالة من سكرتير آخر! اسم البوت:", business_message.via_bot?.first_name || "غير معروف");
+    }
+    // ====================================================
+
     const chatId = String(business_message.chat.id);
     const fromId = business_message.from?.id ? String(business_message.from.id) : null;
     const msgId = business_message.message_id;
@@ -67,6 +76,7 @@ export default async function (business_message) {
 
     // أزلنا شرط !text لكي نسمح بمرور الصور والملصقات والرسائل الفارغة من النص
     if (!fromId || !connectionId) return;
+    
 
     // 1. فحص اتصال الأعمال: منع أي اتصال ليس اتصالك الشخصي المخزن في الداتابيس (يحجب B نهائياً)
     const sender_id = fromId;
