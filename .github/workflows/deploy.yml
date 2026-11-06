@@ -1,0 +1,46 @@
+name: Deploy SaaS Bot
+
+# هذا الجزء يسمح لنا بتشغيل السكريبت عبر الـ API واستقبال البيانات من الـ Web App
+on:
+  workflow_dispatch:
+    inputs:
+      bot_username:
+        description: 'Bot Username'
+        required: true
+      cli_token:
+        description: 'CLI Login Token'
+        required: true
+      owner_id:
+        description: 'User Telegram ID'
+        required: true
+
+jobs:
+  deploy-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. سحب كود المشروع النظيف
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      # 2. تجهيز بيئة Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. إنشاء ملف config.js وحقن آيدي المستخدم بداخله
+      - name: Create Config File
+        run: |
+          mkdir -p tgcloud/lib
+          cat << 'EOF' > tgcloud/lib/config.js
+          export const OWNER_ID = "${{ github.event.inputs.owner_id }}";
+          EOF
+          
+      # 4. تسجيل الدخول والرفع السحابي وتطبيق قاعدة البيانات
+      - name: TGCloud Deploy
+        run: |
+          # تمرير التوكين مباشرة لتجاوز الإدخال اليدوي
+          echo "${{ github.event.inputs.cli_token }}" | npx tgcloud login
+          npx tgcloud push --force
+          npx tgcloud migrate
