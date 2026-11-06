@@ -1,6 +1,5 @@
 name: Deploy SaaS Bot
 
-# هذا الجزء يسمح لنا بتشغيل السكريبت عبر الـ API واستقبال البيانات من الـ Web App
 on:
   workflow_dispatch:
     inputs:
@@ -23,24 +22,24 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       
-      # 2. تجهيز بيئة Node.js
+      # 2. تجهيز بيئة Node.js (تم التحديث للإصدار 22 لتجاوز التحذير)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
-      # 3. إنشاء ملف config.js وحقن آيدي المستخدم بداخله
-      - name: Create Config File
-        run: |
-          mkdir -p tgcloud/lib
-          cat << 'EOF' > tgcloud/lib/config.js
-          export const OWNER_ID = "${{ github.event.inputs.owner_id }}";
-          EOF
-          
-      # 4. تسجيل الدخول والرفع السحابي وتطبيق قاعدة البيانات
+      # 3. التهيئة والرفع السحابي (محاكاة الأمر الذهبي)
       - name: TGCloud Deploy
         run: |
-          # تمرير التوكين مباشرة لتجاوز الإدخال اليدوي
-          echo "${{ github.event.inputs.cli_token }}" | npx tgcloud login
+          # تمرير توكين السحابة تلقائياً لإنشاء مساحة البوت
+          echo "${{ github.event.inputs.cli_token }}" | npm create @tgcloud/bot@latest ${{ github.event.inputs.bot_username }}
+          
+          # نسخ ملفات مشروعنا (السكرتير) إلى مجلد البوت الجديد
+          rm -rf ${{ github.event.inputs.bot_username }}/tgcloud
+          cp -r tgcloud ${{ github.event.inputs.bot_username }}/
+          
+          # الدخول للمجلد، حقن الآيدي الخاص بالمستخدم، ثم الرفع وتطبيق قاعدة البيانات
+          cd ${{ github.event.inputs.bot_username }}
+          echo "export const OWNER_ID = \"${{ github.event.inputs.owner_id }}\";" > tgcloud/lib/config.js
           npx tgcloud push --force
           npx tgcloud migrate
