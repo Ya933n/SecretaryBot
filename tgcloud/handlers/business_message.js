@@ -120,15 +120,15 @@ export default async function (business_message) {
                 const stars = gift.star_count || "غير محدد";
                 const emoji = (gift.sticker && gift.sticker.emoji) ? gift.sticker.emoji : "🎁";
                 
-                alertMsg = `🎁 **إشعار نظام - هدية جديدة!**\n\n`;
+                alertMsg = `<tg-emoji emoji-id="5280615440928758599">🎁</tg-emoji> <b>هدية جديدة!</b>\n\n`;
                 alertMsg += `لقد قام هذا المستخدم بإرسال هدية لك (${emoji}).\n`;
-                alertMsg += `⭐️ **القيمة:** ${stars} نجمة\n`;
+                alertMsg += `**القيمة:** ${stars} نجمة\n`;
 
                 if (gift.slug && gift.num) {
-                    alertMsg += `💎 **اسم ورقم الهدية:** \`${gift.slug}-${gift.num}\`\n`;
-                    replyMarkup = { inline_keyboard: [[{ text: "رؤية الهدية 💎", url: `https://t.me/nft/${gift.slug}-${gift.num}` }]] };
+                    alertMsg += `<tg-emoji emoji-id="5280615440928758599">🎁</tg-emoji> <b>الهدية:</b><code>${gift.slug}-${gift.num}</code>\n`;
+                    replyMarkup = { inline_keyboard: [[{ text: "رؤية الهدية", url: `https://t.me/nft/${gift.slug}-${gift.num}` }]] };
                 } else if (gift.id) {
-                    alertMsg += `🔹 **معرف الهدية (ID):** \`${gift.id}\`\n`;
+                    alertMsg += `<b>معرف الهدية:</b> <code>${gift.id}</code>\n`;
                 }
             } 
             // 2. إذا كانت هدية مطورة منقولة (NFT - Unique Gift) 
@@ -139,14 +139,14 @@ export default async function (business_message) {
                 const emoji = uGift.model?.sticker?.emoji || "💎";
                 const transferStars = business_message.unique_gift.transfer_star_count || 0;
 
-                alertMsg = `💎 **إشعار نظام - هدية مطورة (NFT) منقولة!**\n\n`;
+                alertMsg = `<tg-emoji emoji-id="5280615440928758599">🎁</tg-emoji> <b>هدية مطورة!</b>\n\n`;                
                 alertMsg += `لقد قام هذا المستخدم بنقل هدية مطورة إليك (${emoji}).\n`;
-                alertMsg += `🏷 **الاسم:** ${baseName}\n`;
-                alertMsg += `⭐️ **تكلفة النقل:** ${transferStars} نجمة\n`;
-                alertMsg += `🔗 **المعرف:** \`${nftName}\`\n`;
+                alertMsg += `<b>الاسم:</b> ${baseName}\n`;
+                alertMsg += `<b>تكلفة النقل:</b> ${transferStars} نجمة\n`;
+                alertMsg += `<b>المعرف:</b> <code>${nftName}</code>\n`;
 
                 // زر الرابط المباشر بناءً على الاسم المدمج
-                replyMarkup = { inline_keyboard: [[{ text: "رؤية الهدية المطورة 💎", url: `https://t.me/nft/${nftName}` }]] };
+                replyMarkup = { inline_keyboard: [[{ text: "رؤية الهدية", url: `https://t.me/nft/${nftName}` }]] };
             }
             // 3. إذا كانت عملية دفع مباشر بالنجوم
             else if (business_message.successful_payment) {
@@ -161,7 +161,7 @@ export default async function (business_message) {
                 chat_id: ADMIN_GROUP_ID,
                 message_thread_id: threadId,
                 text: alertMsg,
-                parse_mode: "Markdown"
+                parse_mode: "HTML"
             };
 
             if (replyMarkup) sendPayload.reply_markup = replyMarkup;
