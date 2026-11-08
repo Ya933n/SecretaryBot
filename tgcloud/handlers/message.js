@@ -378,10 +378,3 @@ async function clearInboxNotification(userId, adminGroupId, bizConnectionId = nu
     }
 }
 
-//async function clearInboxNotification(userId, adminGroupId) {
-  //  const notif = await db.select().from(inbox_notifications).where(eq(inbox_notifications.userId, userId)).get();
-    //if (notif) {
-      //  try { await api.deleteMessage({ chat_id: adminGroupId, message_id: notif.notifMsgId }); } catch (e) {}
-        //await db.delete(inbox_notifications).where(eq(inbox_notifications.userId, userId)).run();
-    //}
-//}
