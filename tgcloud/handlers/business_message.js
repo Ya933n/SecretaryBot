@@ -260,8 +260,8 @@ export default async function (business_message) {
 
         const cleanGroupId = ADMIN_GROUP_ID.replace('-100', '');
         const topicLink = `https://t.me/c/${cleanGroupId}/${threadId}`;
-        const notifText = `رسالة جديدة 📩\n\n• المعرف: <code>${fromId}</code>\n• الاسم: ${userName}\n• اسم المستخدم: ${userHandle}`;
-        const keyboard = { inline_keyboard: [[{ text: "اذهب إلى الدردشة", url: topicLink, icon_custom_emoji_id: "5886455371559604605"}], [{ text: "قراءة ✔️", callback_data: `read_${fromId}` }]] };
+        const notifText = `<tg-emoji emoji-id="5253742260054409879">✉️</tg-emoji> <b>رسالة جديدة</b>\n\n• المعرف: <code>${fromId}</code>\n• الاسم: ${userName}\n• اسم المستخدم: ${userHandle}`;
+        const keyboard = { inline_keyboard: [[{ text: "اذهب إلى الدردشة", url: topicLink, icon_custom_emoji_id: "5886455371559604605"}], [{ text: "تعيين كمقروء", callback_data: `read_${fromId}`,style: "success",icon_custom_emoji_id: "5823396554345549784" }]] };
 
         try {
             const notifMsg = await api.sendMessage({ chat_id: ADMIN_GROUP_ID, text: notifText, parse_mode: 'HTML', reply_markup: keyboard });
