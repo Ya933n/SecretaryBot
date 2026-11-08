@@ -242,11 +242,11 @@ export default async function (message) {
         const keyboard = {
             inline_keyboard: [
                 [
-                    { text: `${realUserId}`, copy_text: { text: String(realUserId) } },
+             //       { text: `${realUserId}`, copy_text: { text: String(realUserId) } },
                     { text: `${displayUserName}`, callback_data: "noop" } // زر اسم المستخدم الحقيقي
                 ],
-                [{ text: "اذهب إلى الدردشة 💬", url: `https://t.me/c/${cleanGroupId}/${threadId}` }],
-                [{ text: "حذف التذكير 🗑", callback_data: `delrem` }]
+                [{ text: "اذهب إلى الدردشة", url: `https://t.me/c/${cleanGroupId}/${threadId}`, icon_custom_emoji_id: "5886455371559604605" }],
+                [{ text: "حذف", callback_data: `delrem`,style: "danger",icon_custom_emoji_id: "6021413766669801212"}]
             ]
         };
 
