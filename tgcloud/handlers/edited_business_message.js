@@ -31,7 +31,7 @@ export default async function (edited_business_message) {
         await api.sendMessage({
             chat_id: adminGroupId,
             message_thread_id: threadId,
-            text: '<tg-emoji emoji-id="5348417723103722255">✏️</tg-emoji> قام المستخدم بتعديل هذه الرسالة إلى:',
+            text: '<tg-emoji emoji-id="5395444784611480792">✏️</tg-emoji> قام المستخدم بتعديل هذه الرسالة إلى:',
             parse_mode: 'HTML',
             reply_parameters: replyToTopicMsgId ? { message_id: replyToTopicMsgId, allow_sending_without_reply: true } : undefined
         });
