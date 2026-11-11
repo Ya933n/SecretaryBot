@@ -245,7 +245,7 @@ export default async function (message) {
              //       { text: `${realUserId}`, copy_text: { text: String(realUserId) } },
                     { text: `${displayUserName}`, callback_data: "noop" } // زر اسم المستخدم الحقيقي
                 ],
-                [{ text: "اذهب إلى الدردشة", url: `https://t.me/c/${cleanGroupId}/${threadId}`, icon_custom_emoji_id: "5886455371559604605" }],
+                [{ text: "اذهب إلى الرسالة", url: `https://t.me/c/${cleanGroupId}/${threadId}/${replyTo.message_id}`, icon_custom_emoji_id: "5886455371559604605" }],
                 [{ text: "حذف", callback_data: `delrem`,style: "danger",icon_custom_emoji_id: "6021413766669801212"}]
             ]
         };
