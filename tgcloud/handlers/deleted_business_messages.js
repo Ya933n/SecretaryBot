@@ -53,7 +53,8 @@ export default async function (deleted_business_messages) {
                     await api.sendMessage({
                         chat_id: adminGroupId,
                         message_thread_id: topicRecord.threadId,
-                        text: "🗑 قام المستخدم بحذف هذه الرسالة.",
+                        text: '<tg-emoji emoji-id="5445267414562389170">🗑</tg-emoji> قام المستخدم بحذف هذه الرسالة.'
+                        parse_mode: 'HTML', // السطر الذي تم إضافته
                         reply_parameters: {
                             message_id: Number(mapRecord.topicMsgId),
                             allow_sending_without_reply: true
