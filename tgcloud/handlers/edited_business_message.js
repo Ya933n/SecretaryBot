@@ -28,7 +28,7 @@ export default async function (edited_business_message) {
 
     try {
         // أ. إرسال تنبيه في الموضوع مع الرد على الرسالة القديمة
-        await api.sendMessage({
+        const alertMsg = await api.sendMessage({
             chat_id: adminGroupId,
             message_thread_id: threadId,
             text: '<tg-emoji emoji-id="5395444784611480792">✏️</tg-emoji> قام المستخدم بتعديل هذه الرسالة إلى:',
@@ -39,7 +39,7 @@ export default async function (edited_business_message) {
         // ب. إرسال النسخة الجديدة بعد التعديل (نص، وسائط، أو رسالة غنية)
         const newCopiedMsg = await mirrorMessage(edited_business_message, adminGroupId, {
             threadId: threadId,
-            replyToMsgId: replyToTopicMsgId
+            replyToMsgId: alertMsg ? alertMsg.message_id : replyToTopicMsgId
         });
 
         // تحديث الربط في قاعدة البيانات في حال قام بحذفها أو تعديلها مرة أخرى
